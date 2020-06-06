@@ -16,7 +16,7 @@ class PgStatDatabase(Table):
     
     def result(self):
         self._get_anomaly()
-        self._get_basic_metrics("tracer")
+        print(self._get_basic_metrics("tracer"))
     
     def _get_anomaly(self):
         try:
@@ -31,6 +31,4 @@ class PgStatDatabase(Table):
         '''
         if not dbname:
             raise Exception('db name is not defined')
-        t = text(f"SELECT * FROM {self.PG_STAT_DATABASE} WHERE datname =:x")
-        result = self._connection.execute(t, x=dbname).fetchone()
-        return dict(result)
+        return self.select_database(self.PG_STAT_DATABASE, dbname)

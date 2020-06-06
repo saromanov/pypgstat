@@ -27,11 +27,10 @@ class PgStatDatabase(Table):
             print('unable to get anomaly')
     
     def _get_basic_metrics(self, dbname:str):
-        ''' return basic metrics
+        ''' return all metrics from pg_stat_database
         '''
         if not dbname:
             raise Exception('db name is not defined')
         t = text(f"SELECT * FROM {self.PG_STAT_DATABASE} WHERE datname =:x")
-        result = self._connection.execute(t, x=dbname).fetchall()
-        for r in result:
-            print(r.numbackends)
+        result = self._connection.execute(t, x=dbname).fetchone()
+        return dict(result)

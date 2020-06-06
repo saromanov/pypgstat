@@ -15,12 +15,19 @@ class PgStatDatabase(Table):
         Table.__init__(self, connection)
     
     def result(self):
-        self._get_anomaly()
+        self._get_anomaly('tracer')
         print(self._get_basic_metrics("tracer"))
     
-    def _get_anomaly(self):
+    def _get_anomaly(self, dbname:str):
         try:
-            result = self._connection.execute(f'select datname, (xact_commit*100)/(xact_commit+xact_rollback) as c_ratio, deadlocks, conflicts, temp_files, pg_size_pretty(temp_bytes) as temp_size from {self.PG_STAT_DATABASE}')
+            result = self._connection.execute(
+                f'select datname, \
+                CASE \
+                    WHEN xact_commit+xact_rollback = 0 THEN 0 \
+                    ELSE (xact_commit*100)/(xact_commit+xact_rollback) \
+                END as c_ratio, \
+                deadlocks, conflicts, temp_files, pg_size_pretty(temp_bytes) as temp_size \
+                from {self.PG_STAT_DATABASE}')
             for r in result:
                 print(result)
         except Exception:

@@ -1,2 +1,2 @@
 # pypgstat
-PG metris
+Simple library for handling PG metrics

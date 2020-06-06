@@ -5,4 +5,4 @@ class PgStatDatabase(Table):
     pg_stat_databaase table
     '''
     def __init__(self, connection):
-        Table.__init__(self)
+        Table.__init__(self, connection)

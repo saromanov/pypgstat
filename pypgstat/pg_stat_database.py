@@ -19,6 +19,9 @@ class PgStatDatabase(Table):
         print(self._get_basic_metrics("tracer"))
     
     def _get_anomaly(self, dbname:str):
+        '''
+        return anomalyes
+        '''
         try:
             result = self._connection.execute(
                 f'select datname, \

@@ -5,7 +5,7 @@ class PgStatActivity(Table):
     '''
     implementation of handling pg_stat_activity
     '''
-    PG_STAT_DATABASE = 'pg_stat_activity'
+    PG_ACTIVITY_DATABASE = 'pg_stat_activity'
     def __init__(self, connection):
          Table.__init__(self, connection)
     
@@ -15,9 +15,18 @@ class PgStatActivity(Table):
         '''
         try:
             result = self._connection.execute(
-                f'SELECT count(*) AS total_conns FROM pg_stat_activity;\
-                from {self.PG_STAT_DATABASE}')
+                f'SELECT count(*) AS total_conns FROM\
+                 {self.PG_STAT_DATABASE};')
             for r in result:
                 print(result)
         except Exception:
-            raise Exception('unable to get anomaly')
+            raise Exception('unable to get total connections')
+    
+    def _info(self):
+        try:
+            result = self._connection.execute(
+                f'SELECT datname, pid, backend_start FROM {self.PG_ACTIVITY_DATABASE} ORDER BY backend_start DESC;')
+            for r in result:
+                print(result)
+        except Exception:
+            raise Exception('unable to get total connections')

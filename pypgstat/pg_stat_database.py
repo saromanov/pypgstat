@@ -11,12 +11,13 @@ class PgStatDatabase(Table):
 
     PG_STAT_DATABASE = 'pg_stat_database'
 
-    def __init__(self, connection):
+    def __init__(self, connection, table_name):
         Table.__init__(self, connection)
+        self._table_name = table_name
     
     def result(self):
-        self._get_anomaly('tracer')
-        print(self._get_basic_metrics("tracer"))
+        self._get_anomaly(self._table_name)
+        print(self._get_basic_metrics(self._table_name))
     
     def _get_anomaly(self, dbname:str):
         '''
@@ -34,7 +35,7 @@ class PgStatDatabase(Table):
             for r in result:
                 print(result)
         except Exception:
-            print('unable to get anomaly')
+            raise Exception('unable to get anomaly')
     
     def _get_basic_metrics(self, dbname:str):
         ''' return all metrics from pg_stat_database

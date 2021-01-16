@@ -1,6 +1,10 @@
 from table import Table
 from sqlalchemy.sql import text
 
+
+# https://dataegret.ru/2015/11/introduction-to-pg_stat_activity/
+# https://hakibenita.com/sql-anomaly-detection
+
 class PgStatActivity(Table):
     '''
     implementation of handling pg_stat_activity

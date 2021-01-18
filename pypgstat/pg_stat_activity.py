@@ -5,6 +5,10 @@ from sqlalchemy.sql import text
 # https://dataegret.ru/2015/11/introduction-to-pg_stat_activity/
 # https://hakibenita.com/sql-anomaly-detection
 
+
+class PyPGException(Exception):
+    pass
+
 class PgStatActivity(Table):
     '''
     implementation of handling pg_stat_activity
@@ -24,7 +28,7 @@ class PgStatActivity(Table):
             for r in result:
                 print(result)
         except Exception:
-            raise Exception('unable to get total connections')
+            raise PyPGException('unable to get total connections')
     
     def _info(self):
         try:
@@ -33,4 +37,4 @@ class PgStatActivity(Table):
             for r in result:
                 print(result)
         except Exception:
-            raise Exception('unable to get total connections')
+            raise PyPGException('unable to get total connections')

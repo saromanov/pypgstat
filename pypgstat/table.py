@@ -9,3 +9,6 @@ class Table:
     def select_database(self, table_name:str, db_name: str) -> str:
        return dict(self._connection.execute(\
             text(f"SELECT * FROM {table_name} WHERE datname =:x"), x=db_name).fetchone())
+    
+    def query(self, q):
+         return self._connection.execute(q)

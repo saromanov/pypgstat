@@ -24,7 +24,7 @@ class PgStatDatabase(Table):
         return anomalyes
         '''
         try:
-            result = self._connection.execute(
+            result = self.query(
                 f'select datname, \
                 CASE \
                     WHEN xact_commit+xact_rollback = 0 THEN 0 \

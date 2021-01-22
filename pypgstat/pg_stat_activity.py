@@ -17,6 +17,9 @@ class PgStatActivity(Table):
     def __init__(self, connection):
          Table.__init__(self, connection)
     
+    def result(self):
+        print(self._total_connections())
+    
     def _total_connections(self):
         '''
         return number of total connections
@@ -24,7 +27,7 @@ class PgStatActivity(Table):
         try:
             result = self._connection.execute(
                 f'SELECT count(*) AS total_conns FROM\
-                 {self.PG_STAT_DATABASE};')
+                 {self.PG_ACTIVITY_DATABASE};')
             for r in result:
                 print(result)
         except Exception:
@@ -43,7 +46,7 @@ class PgStatActivity(Table):
         '''
         return number of lonq queries bases on interval
         '''
-        result = self.query(f'SELECT now() - query_start as "runtime", usename, datname, waiting, state, query FROM pg_stat_activity WHERE now() - query_start > "2 minutes"::interval ORDER BY runtime DESC;')
+        result = self.query(f'SELECT now() - query_start as "runtime", usename, datname, waiting, state, query FROM {self.PG_ACTIVITY_DATABASE} WHERE now() - query_start > "2 minutes"::interval ORDER BY runtime DESC;')
         for r in result:
             print(result)
 

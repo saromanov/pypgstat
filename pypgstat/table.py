@@ -11,4 +11,7 @@ class Table:
             text(f"SELECT * FROM {table_name} WHERE datname =:x"), x=db_name).fetchone())
     
     def query(self, q):
-         return self._connection.execute(q)
+        try:
+            return self._connection.execute(q)
+        except:
+            raise Exception('unable to execute query')

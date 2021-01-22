@@ -38,3 +38,13 @@ class PgStatActivity(Table):
                 print(result)
         except Exception:
             raise PyPGException('unable to get total connections')
+    
+    def _long_queries(self, interval):
+        '''
+        return number of lonq queries bases on interval
+        '''
+        result = self.query(f'SELECT now() - query_start as "runtime", usename, datname, waiting, state, query FROM pg_stat_activity WHERE now() - query_start > "2 minutes"::interval ORDER BY runtime DESC;')
+        for r in result:
+            print(result)
+
+

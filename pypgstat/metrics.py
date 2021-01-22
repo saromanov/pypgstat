@@ -3,11 +3,13 @@ import sqlalchemy as db
 from pg_stat_database import PgStatDatabase
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--host', action='store_true')
-parser.add_argument('--pass', action='store_true')
-parser.add_argument('--db', action='store_true')
-
-engine = db.create_engine('postgresql://tracer:tracer@localhost:5432/tracer')
+parser.add_argument('--host', type=str, default='localhost')
+parser.add_argument('--user', type=str)
+parser.add_argument('--password', type=str)
+parser.add_argument('--db', type=str)
+args = parser.parse_args()
+print(args.host)
+engine = db.create_engine(f'postgresql://{args.user}:{args.password}@{args.host}:5432/{args.db}')
 connect = engine.connect()
 
 pgsd = PgStatDatabase(connect, 'tracer')

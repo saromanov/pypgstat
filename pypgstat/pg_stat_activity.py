@@ -20,6 +20,7 @@ class PgStatActivity(Table):
     
     def result(self):
         connections = self._total_connections()
+        self._db_metrics.write([('connections', connections)])
     
     def _total_connections(self):
         '''

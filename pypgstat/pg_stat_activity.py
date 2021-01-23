@@ -14,8 +14,9 @@ class PgStatActivity(Table):
     implementation of handling pg_stat_activity
     '''
     PG_ACTIVITY_DATABASE = 'pg_stat_activity'
-    def __init__(self, connection):
+    def __init__(self, connection, *args, **kwargs):
          Table.__init__(self, connection)
+         self._db_metrics = kwargs.get('metrics_db')
     
     def result(self):
         print(self._total_connections())

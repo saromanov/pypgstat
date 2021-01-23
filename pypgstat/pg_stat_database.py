@@ -14,6 +14,7 @@ class PgStatDatabase(Table):
     def __init__(self, connection, *args, **kwargs):
         Table.__init__(self, connection)
         self._table_name = kwargs.get('table_name')
+        self._db_metrics = kwargs.get('metrics_db')
     
     def result(self):
         self._get_anomaly(self._table_name)

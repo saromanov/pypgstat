@@ -12,6 +12,9 @@ args = parser.parse_args()
 engine = db.create_engine(f'postgresql://{args.user}:{args.password}@{args.host}:5432/{args.db}')
 connect = engine.connect()
 
-pgsd = [PgStatDatabase(connect, table_name='tracer'), PgStatActivity(connect)]
+engine_metrics = db.create_engine(f'postgresql://{args.user}:{args.password}@{args.host}:5432/{args.db}')
+connect_metrics = engine.connect()
+
+pgsd = [PgStatDatabase(connect, table_name='tracer', metrics_db=connect_metrics), PgStatActivity(connect, metrics_db=connect_metrics)]
 for p in pgsd:
     p.result()

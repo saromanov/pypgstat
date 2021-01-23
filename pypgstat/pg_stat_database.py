@@ -33,7 +33,7 @@ class PgStatDatabase(Table):
                 deadlocks, conflicts, temp_files, pg_size_pretty(temp_bytes) as temp_size \
                 from {self.PG_STAT_DATABASE}')
             for r in result:
-                print(result)
+                print(r)
         except Exception:
             raise Exception('unable to get anomaly')
     

@@ -29,7 +29,7 @@ class PgStatActivity(Table):
                 f'SELECT count(*) AS total_conns FROM\
                  {self.PG_ACTIVITY_DATABASE};')
             for r in result:
-                print(result)
+                print('Connections: ', r)
         except Exception:
             raise PyPGException('unable to get total connections')
     
@@ -38,7 +38,7 @@ class PgStatActivity(Table):
             result = self._connection.execute(
                 f'SELECT datname, pid, backend_start FROM {self.PG_ACTIVITY_DATABASE} ORDER BY backend_start DESC;')
             for r in result:
-                print(result)
+                print(r)
         except Exception:
             raise PyPGException('unable to get total connections')
     
@@ -48,6 +48,6 @@ class PgStatActivity(Table):
         '''
         result = self.query(f'SELECT now() - query_start as "runtime", usename, datname, waiting, state, query FROM {self.PG_ACTIVITY_DATABASE} WHERE now() - query_start > "2 minutes"::interval ORDER BY runtime DESC;')
         for r in result:
-            print(result)
+            print(r)
 
 

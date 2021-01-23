@@ -19,18 +19,19 @@ class PgStatActivity(Table):
          self._db_metrics = kwargs.get('metrics_db')
     
     def result(self):
-        print(self._total_connections())
+        connections = self._total_connections()
     
     def _total_connections(self):
         '''
         return number of total connections
         '''
         try:
-            result = self._connection.execute(
+            result = list(self._connection.execute(
                 f'SELECT count(*) AS total_conns FROM\
-                 {self.PG_ACTIVITY_DATABASE};')
-            for r in result:
-                print('Connections: ', r)
+                 {self.PG_ACTIVITY_DATABASE};'))
+            if len(result) > 0:
+                return result[0][0]
+            
         except Exception:
             raise PyPGException('unable to get total connections')
     

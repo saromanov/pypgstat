@@ -1,5 +1,7 @@
 import argparse
+import time
 import sqlalchemy as db
+
 from pg_stat_database import PgStatDatabase
 from pg_stat_activity import PgStatActivity
 from writer import Writer
@@ -13,8 +15,11 @@ def start(args):
     connect_metrics = engine.connect()
     w = Writer(connect_metrics)
     pgsd = [PgStatDatabase(connect, table_name='tracer', metrics_db=w), PgStatActivity(connect, metrics_db=w)]
-    for p in pgsd:
-        p.result()
+    while True:
+        for p in pgsd:
+            p.result()
+        print('Writer')
+        time.sleep(60)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str, default='localhost')

@@ -20,8 +20,8 @@ class PgStatActivity(Table):
     
     def result(self):
         connections = self._total_connections()
-        self._long_queries()
-        self._db_metrics.write([('connections', connections)])
+        long_queries = self._long_queries()
+        self._db_metrics.write([('connections', connections), ('long_queries', long_queries)])
     
     def _total_connections(self):
         '''
@@ -54,7 +54,6 @@ class PgStatActivity(Table):
                 pid, \
                 now() - {self.PG_ACTIVITY_DATABASE}.query_start AS duration, \
                 query,state FROM {self.PG_ACTIVITY_DATABASE} WHERE (now() - {self.PG_ACTIVITY_DATABASE}.query_start) > interval '{interval}';")
-        for r in result:
-            print(r)
+        return len(list(result))-1
 
 

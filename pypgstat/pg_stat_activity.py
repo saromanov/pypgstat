@@ -20,6 +20,7 @@ class PgStatActivity(Table):
     
     def result(self):
         connections = self._total_connections()
+        self._long_queries()
         self._db_metrics.write([('connections', connections)])
     
     def _total_connections(self):
@@ -45,11 +46,14 @@ class PgStatActivity(Table):
         except Exception:
             raise PyPGException('unable to get total connections')
     
-    def _long_queries(self, interval):
+    def _long_queries(self, interval='2 minutes'):
         '''
         return number of lonq queries bases on interval
         '''
-        result = self.query(f'SELECT now() - query_start as "runtime", usename, datname, waiting, state, query FROM {self.PG_ACTIVITY_DATABASE} WHERE now() - query_start > "2 minutes"::interval ORDER BY runtime DESC;')
+        result = self.query(f"SELECT \
+                pid, \
+                now() - {self.PG_ACTIVITY_DATABASE}.query_start AS duration, \
+                query,state FROM {self.PG_ACTIVITY_DATABASE} WHERE (now() - {self.PG_ACTIVITY_DATABASE}.query_start) > interval '{interval}';")
         for r in result:
             print(r)
 

@@ -33,6 +33,7 @@ class PgStatDatabase(Table):
                 END as c_ratio, \
                 deadlocks, conflicts, temp_files, pg_size_pretty(temp_bytes) as temp_size \
                 from {self.PG_STAT_DATABASE}')
+            print('Return anomalies of database')
             for r in result:
                 print(r)
         except Exception:

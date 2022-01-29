@@ -1,13 +1,12 @@
 from table import Table
 from sqlalchemy.sql import text
 
+from exceptions import PyPGException
+
 
 # https://dataegret.ru/2015/11/introduction-to-pg_stat_activity/
 # https://hakibenita.com/sql-anomaly-detection
 
-
-class PyPGException(Exception):
-    pass
 
 class PgStatActivity(Table):
     '''
@@ -55,5 +54,15 @@ class PgStatActivity(Table):
                 now() - {self.PG_ACTIVITY_DATABASE}.query_start AS duration, \
                 query,state FROM {self.PG_ACTIVITY_DATABASE} WHERE (now() - {self.PG_ACTIVITY_DATABASE}.query_start) > interval '{interval}';")
         return len(list(result))-1
+    
+    def _abnormal_queries(self):
+        '''
+        return abnormal queries with waiting status
+        '''
+        result = self.query(f"SELECT \
+        datname,usename,current_query \
+        FROM {self.PG_ACTIVITY_DATABASE}\
+        WHERE waiting")
+        return result
 
 

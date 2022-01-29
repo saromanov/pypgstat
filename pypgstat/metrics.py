@@ -14,13 +14,10 @@ def start(args):
     engine_metrics = db.create_engine(f'postgresql://{args.user}:{args.password}@{args.host}:5432/{args.db}')
     connect_metrics = engine.connect()
     w = Writer(connect_metrics)
-    pgsd = [PgStatDatabase(connect, table_name=args.table, metrics_db=w), PgStatActivity(connect, metrics_db=w)]
+    pgsd = [PgStatDatabase(connect, table_name=args.table, metrics_db=w), PgStatActivity(connect, table_name=args.table, metrics_db=w)]
     print('Initialization of pypgstat')
-    while True:
-        for p in pgsd:
-            p.result()
-        print('Writer')
-        time.sleep(60)
+    for p in pgsd:
+        p.result()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str, default='localhost')
